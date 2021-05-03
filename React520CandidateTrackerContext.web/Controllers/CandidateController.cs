@@ -60,6 +60,12 @@ namespace React520CandidateTrackerContext.web.Controllers
             db.UpdateStatus(c);
         }
 
+        [Route("getcounts")]
+        public CountsViewModel GetCounts()
+        {
+            var db = new CandidateRepository(_conn);
+            return db.GetCounts();
+        }
         
 
     }

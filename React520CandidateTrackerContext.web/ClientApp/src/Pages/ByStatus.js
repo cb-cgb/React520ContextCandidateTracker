@@ -2,6 +2,7 @@ import React from 'react';
 import CandRow from '../Components/CandRow';
 import axios from 'axios';
 
+
 class Home extends React.Component {
     state = { 
      candidates: [],
@@ -11,7 +12,6 @@ class Home extends React.Component {
      
 
      componentDidMount = async() => {
-        await console.log(this.props.match.params.status);
       const {data} = await axios.get(`/api/candidate/getbystatus?status=${this.props.match.params.status}`);
       await this.setState({candidates: data});
     }
@@ -19,9 +19,11 @@ class Home extends React.Component {
     render() { 
         const notesVisible = this.state.showNotes;
         return (
+            
            
             <div className="container">
                 <div>                    
+                    <h3>{this.props.match.params.status}</h3>
                      <button className="btn btn-info btn-lg" onClick={() => this.setState({showNotes:!notesVisible})}>
                          Toggle Notes</button>                    
 

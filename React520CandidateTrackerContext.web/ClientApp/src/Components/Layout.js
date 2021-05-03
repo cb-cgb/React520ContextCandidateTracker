@@ -1,9 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { StatusCountContext } from '../StatusCountContext';
 
 const Layout = (props) => {
     return (
-        <div>              
+       <StatusCountContext.Consumer> 
+        {counts=> {
+            const {pending, confirmed,refused} =  counts.statusCounts;
+            console.log(`layout log:${pending} ${confirmed} ${refused}`)
+
+          return ( 
+            
+            <div>    
+                        
                 <div className="container" style={{textAlign:"center"}}>
                   <h3>Candidate Tracker</h3>
                   <div  style={{backgroundColor:"lightgray"}}   >
@@ -17,34 +26,35 @@ const Layout = (props) => {
                          </div>
 
                          <div className="col-md-3">
-                          <Link to="/view/Pending" style={{color:"lightseagreen"}}>Pending</Link>
+                          <Link to="/pending/Pending" style={{color:"lightseagreen"}}>Pending ({pending})</Link>
                          </div>
 
                          <div className="col-md-2">
-                          <Link to="/view/Confirmed" style={{color:"lightseagreen"}}>Confirmed</Link>
+                          <Link to="/confirmed/Confirmed" style={{color:"lightseagreen"}}>Confirmed ({confirmed})</Link>
                          </div>
 
                          <div className="col-md-2">
-                          <Link to="/view/Refused" style={{color:"lightseagreen"}}>Declined</Link>
+                          <Link to="/refused/Refused" style={{color:"lightseagreen"}}>Declined ({refused})</Link>
                          </div>
                      </div>
-                    {/* <ul className="nav navbar-nav">
-                      <li><Link to="/">Home</Link></li>
-                      <li><Link to="/add">Add Candidate</Link></li>
-                      <li><Link to="/pending">Pending </Link></li>
-                      <li><Link to="/confirmed">Confirmed </Link></li>
-                      <li><Link to="/refused">Refused </Link></li>
-                    </ul> */}
-                  </div>
-                </div>
+                   
+                   </div>
+                </div> 
              
             <div className="container" style={{ marginTop: 60 }}>
                 {props.children}
             </div>
-
+          
         </div>
+        )
+      
+      }
+
+      }
+      </StatusCountContext.Consumer> 
         
     )
+    
 }
 
 export default Layout;

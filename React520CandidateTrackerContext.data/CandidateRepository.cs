@@ -24,11 +24,11 @@ namespace React520CandidateTrackerContext.data
 
         public List<Candidate> GetCandidates(string status)
         {
-            
+
             using (var context = new CandidateContext(_conn))
             {
-                var status = status.ToLower();
-                return context.Candidates.Where(c => c.Status.ToLower() == status.ToList();
+                var statusLower = status.ToLower();
+                return context.Candidates.Where(c => c.Status.ToLower() == statusLower).ToList();
             }
         }
 
@@ -38,7 +38,7 @@ namespace React520CandidateTrackerContext.data
             {
                 return context.Candidates.FirstOrDefault(c => c.Id == Id);
             }
-         }
+        }
 
         public void Add(Candidate c)
         {
@@ -58,6 +58,17 @@ namespace React520CandidateTrackerContext.data
             }
         }
 
+        public CountsViewModel GetCounts()
+        {
+            using (var context = new CandidateContext(_conn))
+            {
+                var counts = new CountsViewModel();
+                counts.pending =  GetCandidates("Pending").Count;
+                counts.confirmed = GetCandidates("Confirmed").Count;
+                counts.refused = GetCandidates("Refused").Count;
 
+                return counts;
+            }
+        }
     }
 }

@@ -1,6 +1,8 @@
 import React from 'react';  
 import {produce} from 'immer';
 import axios from 'axios';
+import { StatusCountContext } from '../StatusCountContext';
+
 
 class AddCand extends React.Component {
     state = { 
@@ -20,17 +22,23 @@ class AddCand extends React.Component {
           this.setState(nextState);        
      }
 
-     onClickAdd = async() => {
+     onClickAdd = async(updateCounts) => {
          await axios.post('/api/candidate/add', {...this.state.candidate,  status:'Pending'});
+         await updateCounts();
          this.props.history.push('/');
 
      }
     render() { 
-        const {firstName,lastName,phone,email,details} = this.state;
-
+        const {firstName,lastName,phone,email,details} = this.state.candidate;
+        const  isMissingData= firstName ==='' || lastName ===''|| phone ==='';
+  
         return ( 
-           
-              <div className="row card card-body bg-light" style={{width:400}} >
+            <StatusCountContext.Consumer>
+             {counts => {
+                 const {updateCounts} = counts;
+                 return(
+
+                  <div className="row card card-body bg-light" style={{width:400}} >
                 
                    <h3 style={{textAlign: "center" }}>Add Candidate</h3>
                    <br/> 
@@ -66,8 +74,12 @@ class AddCand extends React.Component {
                         onChange={this.onTextChange}
                        />  
                      <br/>
-                     <button className="btn btn-success btn-block" onClick={this.onClickAdd}>Add!</button>
+                     <button disabled={isMissingData} className="btn btn-success btn-block" onClick={()=>this.onClickAdd(updateCounts)}>Add!</button>
             </div>
+            )
+           }
+           }
+           </StatusCountContext.Consumer>
          );
     }
 }
